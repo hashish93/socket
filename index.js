@@ -8,23 +8,6 @@ const REDIS_PORT = process.env.REDIS_PORT;
 const client = redis.createClient(REDIS_PORT);
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); 
-// var arr = [
-//   {userID:1,socketId:'234234assdfsdf24sfsadsdf'},
-//   {userID:2,socketId:'zcxczx234fds4234'}
-// ];
-// // ... or with a callback
-// client.del('testlist');
-// client.rpush.apply(client, ['testlist'].concat(arr));
-// client.rpush.apply(client, ['testlist'].concat(arr).concat(function(err, data){
-//   console.log(err, data);
-// }))
-// client.lrange('testlist', 0, -1, function (error, items) {
-//   if (error) throw error
-//   items.forEach(function (item) {
-//     console.log(item);
-//   })
-// })
-
 
 var clients =[];
 var getClearClient = () =>{
@@ -45,7 +28,7 @@ var getClearMsg = () =>{
 
 /*define routes*/
 app.get('/', (req, res)=>{
-   res.json({ message: 'to send message please send on /sendmsg' });   
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.post('/sendmsg',(req, res) =>{

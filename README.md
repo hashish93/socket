@@ -6,7 +6,9 @@ to install node dependencies run
 
 then
 
-to test front end you need to run index.html on external server or change index.js to return index.html
+to test front end you need to run
+
+# http://localhost:5000
 
 you can open more than one socket and the appliction will generate client id and open socket with the app
 
