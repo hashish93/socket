@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 1px solid #eee; padding: 10px; width: 90%; margin-right: .5%; margin-top: 15px;}
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 40px }
+    </style>
+  </head>
+  <body>
+    <h2>client id : <span id="clientId"></span></h2>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="msg" autocomplete="off" placeholder="type the message you want to send" />
+      <input id="toIds" autocomplete="off" placeholder="type user id you want to sent specific if any keep it empty">
+      <button>Send</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function () {
+        /*define base variables*/
+        var getClearClient = function(){
+        return {
+          clientId : '',
+          socketId:'',
+        };
+      }
+      var getClearMsg = function(){
+         return {
+              msg:'',
+              broadcast:false,
+              toIds:[]
+          };
+      }
+        var clientInfo = getClearClient();
+        /*end define base variables*/
+
+        /*define socket variables*/
+        var clientId = Math.floor(Math.random() * 10);
+        $('#clientId').append(clientId);
+        clientInfo.clientId = clientId;
+        var socket = io('http://localhost:5000');
+        socket.on('connect', function (data) {
+          socket.emit('storeClientInfo', clientInfo);
+        });
+        /*end define socket variables*/
+
+        /*form submittion*/
+        $('form').submit(function(){
+          var msgInfo = getClearMsg();
+          msgInfo.msg = $('#msg').val()
+          if($('#toIds').val()){
+            msgInfo.broadcast = true;
+            msgInfo.toIds= $('#toIds').val().split(',');
+          }
+          socket.emit('socket_receiver', msgInfo);
+          $('#msg').val('');
+          $('#toIds').val('')
+          msgInfo = getClearMsg();
+          return false;
+        });
+        /*end form submittion*/
+        
+        /*receive message submittion*/
+        socket.on('socket_client', function(msg){
+          console.log(JSON.stringify(msg));
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+        /*end receive message submittion*/
+      });
+    </script>
+  </body>
+</html>

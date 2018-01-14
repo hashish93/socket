@@ -67,11 +67,11 @@ io.on('connection', (socket) =>{
   	    clientInfo = getClearClient();
         clientInfo.clientId = data.clientId;
         clientInfo.socketId = socket.id;
-        clientInfo.socket = socket.toString();
-        client.set(clientInfo.clientId, JSON.stringify(clientInfo))
-        client.get(clientInfo.clientId,function(err,object){
-        	console.log(JSON.parse(object).socketId);
-        })
+        clientInfo.socket = socket;
+        // client.set(clientInfo.clientId, JSON.stringify(clientInfo))
+        // client.get(clientInfo.clientId,function(err,object){
+        // 	console.log(JSON.parse(object).socketId);
+        // })
         clients.push(clientInfo);
         console.log('store Client Info clientId '+clientInfo.clientId+' socketId '+clientInfo.socketId);
         console.log('clients length '+clients.length);
