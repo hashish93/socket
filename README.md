@@ -1,13 +1,26 @@
-# chat-example
+# socket-notification
 
-This is the source code for a very simple chat example used for
-the [Getting Started](http://socket.io/get-started/chat/) guide
-of the Socket.IO website.
+to install node dependencies run
 
-Please refer to it to learn how to run this application.
+ node install
 
-You can also spin up a free Heroku dyno to test it out:
+then
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/socketio/chat-example)
+to test front end you need to run index.html on external server or change index.js to return index.html
 
-Besides, the application is deployed on [Now](https://zeit.co/now): https://socketio-chat-example.now.sh/
+you can open more than one socket and the appliction will generate client id and open socket with the app
+
+you can push notification from api to any customer if you want to broadcast or share message with all clients
+
+to test the api on url
+post request
+# http://localhost:5000/sendmsg
+{
+	{
+		"msg":"test message from rest api",
+		"broadcast":true,
+		"toIds":[1]
+	}
+}
+
+
