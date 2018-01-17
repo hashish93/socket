@@ -4,11 +4,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 5000;
 const redis = require('redis');
-const REDIS_PORT = process.env.REDIS_PORT;
-const client = redis.createClient(REDIS_PORT);
+const client = redis.createClient('6379','127.0.0.1');
 const bodyParser = require('body-parser');
+sadd
 app.use(bodyParser.json()); 
-
 var clients =[];
 var getClearClient = () =>{
         return {
@@ -25,7 +24,18 @@ var getClearMsg = () =>{
       };
 }
 /*end define base variables*/
+client.subscribe('notification');
+client.on('message', function(channel, message){
+     console.log("message from backend "+ message);
+     if(message){
+      var data = getClearMsg();
+      data = JSON.parse(message);
+      if(data.toIds && data.toIds.length > 0 && data.toIds[0].constructor === Array)
+        data.toIds = data.toIds[0];
+      socketReceiver(clients,data);
+     }
 
+  });
 /*define routes*/
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/index.html');
@@ -70,7 +80,7 @@ io.on('connection', (socket) =>{
   	console.log('message sent '+JSON.stringify(data))
   	var msg = getClearMsg();
   	msg =  data;
-  	if(msg.broadcast){
+  	if(msg.broadcast == true || msg.broadcast == 1){
   		clientsPushNotification(clients,msg);
   	}else{
   	io.emit('socket_client', msg.msg);
