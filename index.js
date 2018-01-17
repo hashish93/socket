@@ -6,7 +6,6 @@ var port = process.env.PORT || 5000;
 const redis = require('redis');
 const client = redis.createClient('6379','127.0.0.1');
 const bodyParser = require('body-parser');
-sadd
 app.use(bodyParser.json()); 
 var clients =[];
 var getClearClient = () =>{
